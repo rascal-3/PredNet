@@ -156,7 +156,8 @@ class Main(object):
         return images
 
     def read_image(self, path):
-        image = np.asarray(Image.open(path)).transpose(2, 0, 1)
+        # image = np.asarray(Image.open(path)).transpose(2, 0, 1)
+        image = np.asarray(Image.fromarray(path)).transpose(2, 0, 1)
         # print(str(image.shape[0])+'x'+str(image.shape[1])+'x'+str(image.shape[2]))
         top = (image.shape[1] - self.in_height) / 2
         left = (image.shape[2] - self.in_width) / 2
