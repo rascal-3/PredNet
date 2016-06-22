@@ -11,8 +11,8 @@ from chainer import serializers
 from chainer.functions.loss.mean_squared_error import mean_squared_error
 import net
 
-parser = argparse.ArgumentParser(
-description='PredNet')
+parser = argparse.ArgumentParser(description='PredNet')
+
 parser.add_argument('train', help='Path to training image-label list file')
 parser.add_argument('--gpu', '-g', default=0, type=int,
                     help='GPU ID (negative value indicates CPU)')

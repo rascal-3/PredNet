@@ -4,7 +4,9 @@ import chainer.functions as F
 import chainer.links as L
 from chainer import variable
 
+
 class EltFilter(chainer.Link):
+
     def __init__(self, width, height, channels, batchSize = 1, wscale=1, bias=0, nobias=False,
                 initialW=None, initial_bias=None):
         W_shape = (batchSize, channels, height, width)
@@ -30,7 +32,9 @@ class EltFilter(chainer.Link):
             y = y + self.b
         return y
 
+
 class ConvLSTM(chainer.Chain):
+
     def __init__(self, width, height, in_channels, out_channels, batchSize = 1):
         super(ConvLSTM, self).__init__(
             h_i=L.Convolution2D(out_channels, out_channels, 3, pad=1),
