@@ -46,14 +46,6 @@ class Main(object):
         # self.in_height = 64
         # self.in_channel = 3
 
-        self.prednet = net.PredNet(self.in_width, self.in_height, (self.in_channel, 48, 96, 192),
-                                   (self.in_channel, 48, 96, 192))
-
-        self.model = L.Classifier(self.prednet, lossfun=mean_squared_error)
-        self.model.compute_accuracy = False
-        self.optimizer = optimizers.Adam()
-        self.optimizer.setup(self.model)
-
         if self.args.gpu >= 0:
             cuda.get_device(self.args.gpu).use()
             self.model.to_gpu()
@@ -69,6 +61,14 @@ class Main(object):
     def main(self):
 
         image_list = self.load_image_list(self.args.filename)
+
+        self.prednet = net.PredNet(self.in_width, self.in_height, (self.in_channel, 48, 96, 192),
+                                   (self.in_channel, 48, 96, 192))
+
+        self.model = L.Classifier(self.prednet, lossfun=mean_squared_error)
+        self.model.compute_accuracy = False
+        self.optimizer = optimizers.Adam()
+        self.optimizer.setup(self.model)
 
         if self.args.test:
             self.prednet.reset_state()
@@ -122,6 +122,7 @@ class Main(object):
 
                     print('frameNo:' + str(i))
                     if (i + 1) % bprop_len == 0:
+                        print('i = {}'.format(i))
                         self.model.zerograds()
                         loss.backward()
                         loss.unchain_backward()
@@ -140,7 +141,7 @@ class Main(object):
                     if i == 1 and (num % 10) == 0:
                         print('save the model')
                         serializers.save_npz('out/' + str(num) + '.model', self.model)
-                        print('save the self.optimizer')
+                        print('save the optimizer')
                         serializers.save_npz('out/' + str(num) + '.state', self.optimizer)
 
                     x_batch[0] = y_batch[0]
@@ -158,7 +159,10 @@ class Main(object):
     def read_image(self, path):
         # image = np.asarray(Image.open(path)).transpose(2, 0, 1)
         image = np.asarray(Image.fromarray(path)).transpose(2, 0, 1)
-        # print(str(image.shape[0])+'x'+str(image.shape[1])+'x'+str(image.shape[2]))
+
+        #
+        print(str(image.shape[0])+'x'+str(image.shape[1])+'x'+str(image.shape[2]))
+
         top = (image.shape[1] - self.in_height) / 2
         left = (image.shape[2] - self.in_width) / 2
         bottom = self.in_height + top
