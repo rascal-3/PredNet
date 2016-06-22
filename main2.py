@@ -42,9 +42,9 @@ class Main(object):
         self.xp = cuda.cupy if self.args.gpu >= 0 else np
 
         # Create Model
-        self.in_width = 64
-        self.in_height = 64
-        self.in_channel = 3
+        # self.in_width = 64
+        # self.in_height = 64
+        # self.in_channel = 3
 
         self.prednet = net.PredNet(self.in_width, self.in_height, (self.in_channel, 48, 96, 192),
                                    (self.in_channel, 48, 96, 192))
